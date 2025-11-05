@@ -1,0 +1,126 @@
+<div class="app">
+  <div class="container">
+    <header class="header">
+      <h1>🔌 API Tester</h1>
+      <p>Test any external API endpoint with ease</p>
+    </header>
+
+    <form (ngSubmit)="handleSubmit($event)" class="form">
+      <div class="form-row">
+        <select
+          [(ngModel)]="method"
+          name="method"
+          class="method-select"
+        >
+          <option *ngFor="let m of methods" [value]="m">
+            {{ m }}
+          </option>
+        </select>
+        <input
+          type="text"
+          [(ngModel)]="url"
+          name="url"
+          placeholder="Enter API URL"
+          class="url-input"
+          required
+        />
+        <button type="submit" class="send-button" [disabled]="loading">
+          {{ loading ? 'Sending...' : 'Send' }}
+        </button>
+      </div>
+
+      <div class="form-section">
+        <label class="label">
+          <span>Authentication (WooCommerce API)</span>
+        </label>
+        <div class="auth-section">
+          <select
+            [(ngModel)]="authMethod"
+            name="authMethod"
+            class="auth-select"
+          >
+            <option value="basic">Basic Auth (Header)</option>
+            <option value="query">Query Parameters</option>
+            <option value="none">None</option>
+          </select>
+          <div *ngIf="authMethod !== 'none'" class="auth-inputs">
+            <input
+              type="text"
+              [(ngModel)]="consumerKey"
+              name="consumerKey"
+              placeholder="Consumer Key"
+              class="auth-input"
+            />
+            <input
+              type="password"
+              [(ngModel)]="consumerSecret"
+              name="consumerSecret"
+              placeholder="Consumer Secret"
+              class="auth-input"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <label class="label">
+          <span>Headers (JSON)</span>
+        </label>
+        <textarea
+          [(ngModel)]="headers"
+          name="headers"
+          class="textarea"
+          rows="4"
+          placeholder='{"Content-Type": "application/json"}'
+        ></textarea>
+      </div>
+
+      <div *ngIf="methodsWithBody.includes(method)" class="form-section">
+        <label class="label">
+          <span>Request Body</span>
+        </label>
+        <textarea
+          [(ngModel)]="body"
+          name="body"
+          class="textarea"
+          rows="6"
+          placeholder='{"key": "value"}'
+        ></textarea>
+      </div>
+
+      <div *ngIf="error" class="error-box">
+        <strong>Error:</strong> {{ error }}
+      </div>
+
+      <div *ngIf="response" class="response-section">
+        <div class="response-header">
+          <div class="status-info">
+            <span
+              class="status-badge"
+              [style.backgroundColor]="getStatusColor(response.status)"
+            >
+              {{ response.status }} {{ response.statusText }}
+            </span>
+            <span class="time-info">⏱️ {{ response.time }}ms</span>
+          </div>
+        </div>
+
+        <div class="response-content">
+          <div class="response-section-item">
+            <h3>Response Body</h3>
+            <pre class="response-body">
+              {{ response.data | json }}
+            </pre>
+          </div>
+
+          <div class="response-section-item">
+            <h3>Response Headers</h3>
+            <pre class="response-body">
+              {{ response.headers | json }}
+            </pre>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
