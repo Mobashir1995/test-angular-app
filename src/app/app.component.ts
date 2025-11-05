@@ -29,8 +29,8 @@ export class AppComponent {
   loading = false;
   error: string | null = null;
   authMethod: 'basic' | 'query' | 'none' = 'basic';
-  consumerKey = 'ck_603d3996bc25307337b5b57c89094448f0310a03';
-  consumerSecret = 'cs_87fa9e84303c0d8e575e399d5fb8ccec87c6a1c3';
+  consumerKey = '';
+  consumerSecret = '';
 
   methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
 
